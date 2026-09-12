@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AllerSafe</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <div class="logo">🛡️ AllerSafe</div>
+
+            <div class="tagline">
+                Scan. Understand. Stay Safe.
+            </div>
+        </header>
+
+
+        <section class="hero">
+
+            <h1>
+                Know what's<br>
+                <span>safe to eat.</span>
+            </h1>
+
+            <p>
+                Scan a restaurant menu and let AI
+                identify potential allergen risks.
+            </p>
+
+        </section>
+
+
+        <section class="card">
+
+            <h2>Your Allergen Profile</h2>
+
+            <p class="description">
+                Select the allergens you want AllerSafe
+                to check for.
+            </p>
+
+
+            <div class="allergens">
+
+                <label>
+                    <input type="checkbox" value="Peanuts">
+                    🥜 Peanuts
+                </label>
+
+                <label>
+                    <input type="checkbox" value="Tree Nuts">
+                    🌰 Tree Nuts
+                </label>
+
+                <label>
+                    <input type="checkbox" value="Dairy">
+                    🥛 Dairy
+                </label>
+
+                <label>
+                    <input type="checkbox" value="Gluten">
+                    🌾 Gluten
+                </label>
+
+                <label>
+                    <input type="checkbox" value="Eggs">
+                    🥚 Eggs
+                </label>
+
+                <label>
+                    <input type="checkbox" value="Soy">
+                    🫘 Soy
+                </label>
+
+                <label>
+                    <input type="checkbox" value="Shellfish">
+                    🦐 Shellfish
+                </label>
+
+                <label>
+                    <input type="checkbox" value="Fish">
+                    🐟 Fish
+                </label>
+
+                <label>
+                    <input type="checkbox" value="Sesame">
+                    🌱 Sesame
+                </label>
+
+            </div>
+
+        </section>
+
+
+        <section class="card">
+
+            <h2>Scan Restaurant Menu</h2>
+
+            <div id="dropZone" class="drop-zone">
+
+                <div class="camera">
+                    📸
+                </div>
+
+                <h3>
+                    Upload your menu
+                </h3>
+
+                <p>
+                    JPG, PNG or WEBP
+                </p>
+
+                <input
+                    type="file"
+                    id="menuImage"
+                    accept="image/jpeg,image/png,image/webp"
+                    hidden
+                >
+
+                <button
+                    type="button"
+                    id="chooseButton"
+                >
+                    Choose Menu Image
+                </button>
+
+            </div>
+
+
+            <div
+                id="previewContainer"
+                class="preview-container hidden"
+            >
+
+                <img id="preview">
+
+            </div>
+
+
+            <button
+                id="analyzeButton"
+                class="analyze-button"
+            >
+                🔍 Analyze Menu
+            </button>
+
+
+            <div
+                id="loading"
+                class="loading hidden"
+            >
+
+                <div class="spinner"></div>
+
+                <p>
+                    Reading menu and analyzing allergens...
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section
+            id="results"
+            class="hidden"
+        >
+
+            <div class="card">
+
+                <h2>🧠 AI Analysis</h2>
+
+                <p id="summary"></p>
+
+            </div>
+
+
+            <div id="dishResults"></div>
+
+
+            <div class="card">
+
+                <details>
+
+                    <summary>
+                        View extracted menu text
+                    </summary>
+
+                    <pre id="ocrText"></pre>
+
+                </details>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+
+            <p>
+                ⚠️ AllerSafe provides an AI-based risk
+                assessment and does not guarantee that
+                food is allergen-free.
+            </p>
+
+        </footer>
+
+    </div>
+
+
+    <script src="/static/app.js"></script>
+
+</body>
+
+</html>
