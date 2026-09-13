@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AllerSafe | Secure access</title>
+    <link rel="stylesheet" href="/static/auth.css">
+</head>
+<body>
+    <main class="auth-page">
+        <div class="dot-field" aria-hidden="true"></div>
+        <div class="auth-glow" aria-hidden="true"></div>
+
+        <section class="auth-panel" aria-labelledby="auth-title">
+            <div class="auth-brand">
+                <div class="shield" aria-hidden="true">🛡</div>
+                <div>
+                    <p class="auth-kicker">AllerSafe</p>
+                    <h1 id="auth-title">Secure access</h1>
+                </div>
+            </div>
+
+            <div id="choiceView">
+                <div class="auth-copy">
+                    <p class="eyebrow">Welcome back</p>
+                    <h2>Continue to your allergen-safe workspace</h2>
+                </div>
+
+                <div class="auth-choice-grid">
+                    <button class="auth-option primary" type="button" data-show="signupView">
+                        <span class="option-icon" aria-hidden="true">＋</span>
+                        <span><strong>Sign Up</strong><small>Create a new account</small></span>
+                    </button>
+                    <button class="auth-option" type="button" data-show="signinView">
+                        <span class="option-icon" aria-hidden="true">↪</span>
+                        <span><strong>Sign In</strong><small>Access your saved profile</small></span>
+                    </button>
+                </div>
+            </div>
+
+            <form id="signupView" class="auth-form hidden" novalidate>
+                <div class="auth-copy compact">
+                    <p class="eyebrow">Create account</p>
+                    <h2>Let’s build your safer profile</h2>
+                </div>
+
+                <label class="field-group">
+                    <span class="label">Full name</span>
+                    <input class="field" name="name" autocomplete="name" placeholder="Enter your full name" required>
+                </label>
+                <label class="field-group">
+                    <span class="label">Email</span>
+                    <span class="input-with-icon"><span aria-hidden="true">✉</span><input class="field" type="email" name="email" autocomplete="email" placeholder="you@example.com" required></span>
+                </label>
+                <label class="field-group">
+                    <span class="label">Password</span>
+                    <span class="input-with-icon"><span aria-hidden="true">🔒</span><input class="field password-field" type="password" name="password" autocomplete="new-password" placeholder="Create a password (6+ characters)" minlength="6" required><button class="password-toggle" type="button" data-password-toggle aria-label="Show password">Show</button></span>
+                </label>
+
+                <div class="field-group">
+                    <div class="contacts-heading">
+                        <span class="label">Emergency contacts</span>
+                        <button class="text-button" type="button" id="addContact">+ Add another</button>
+                    </div>
+                    <p class="field-help">Add at least one person AllerSafe can prepare an SOS message for.</p>
+                    <div id="emergencyContacts" class="contact-list"></div>
+                </div>
+
+                <p id="signupError" class="form-error" role="alert" hidden></p>
+                <div class="auth-actions">
+                    <button type="button" class="secondary-button" data-show="choiceView">Back</button>
+                    <button type="submit" class="primary-button">Create account <span aria-hidden="true">→</span></button>
+                </div>
+            </form>
+
+            <form id="signinView" class="auth-form hidden" novalidate>
+                <div class="auth-copy compact">
+                    <p class="eyebrow">Welcome back</p>
+                    <h2>Sign in to your workspace</h2>
+                </div>
+                <label class="field-group">
+                    <span class="label">Email</span>
+                    <span class="input-with-icon"><span aria-hidden="true">✉</span><input class="field" type="email" name="email" autocomplete="email" placeholder="you@example.com" required></span>
+                </label>
+                <label class="field-group">
+                    <span class="label">Password</span>
+                    <span class="input-with-icon"><span aria-hidden="true">🔒</span><input class="field password-field" type="password" name="password" autocomplete="current-password" placeholder="Enter your password" required><button class="password-toggle" type="button" data-password-toggle aria-label="Show password">Show</button></span>
+                </label>
+                <div class="auth-meta"><span>✓ Local demo account</span><span>Profiles stay on this computer</span></div>
+                <p id="signinError" class="form-error" role="alert" hidden></p>
+                <div class="auth-actions">
+                    <button type="button" class="secondary-button" data-show="choiceView">Back</button>
+                    <button type="submit" class="primary-button">Sign in <span aria-hidden="true">→</span></button>
+                </div>
+            </form>
+        </section>
+    </main>
+    <template id="contactTemplate">
+        <fieldset class="contact-card">
+            <div class="contacts-heading"><legend class="label">Contact <span class="contact-number"></span></legend><button class="text-button danger remove-contact" type="button">Remove</button></div>
+            <label><span class="sr-only">Contact name</span><input class="field contact-name" placeholder="Contact name" required></label>
+            <label><span class="sr-only">Contact number</span><input class="field contact-phone" type="tel" autocomplete="tel" placeholder="Contact number" required></label>
+            <label><span class="sr-only">Relationship with you</span><input class="field contact-relation" placeholder="Relationship with you" required></label>
+        </fieldset>
+    </template>
+    <script src="/static/auth.js"></script>
+</body>
+</html>

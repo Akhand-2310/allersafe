@@ -1,0 +1,342 @@
+const menuImage =
+    document.getElementById("menuImage");
+
+const chooseButton =
+    document.getElementById("chooseButton");
+
+const dropZone =
+    document.getElementById("dropZone");
+
+const preview =
+    document.getElementById("preview");
+
+const previewContainer =
+    document.getElementById("previewContainer");
+
+const analyzeButton =
+    document.getElementById("analyzeButton");
+
+const loading =
+    document.getElementById("loading");
+
+const results =
+    document.getElementById("results");
+
+
+let selectedFile = null;
+
+
+/* Choose image */
+
+chooseButton.addEventListener(
+    "click",
+    function () {
+        menuImage.click();
+    }
+);
+
+
+/* File selected */
+
+menuImage.addEventListener(
+    "change",
+    function () {
+
+        if (menuImage.files.length > 0) {
+
+            selectedFile =
+                menuImage.files[0];
+
+            showPreview();
+        }
+    }
+);
+
+
+/* Preview */
+
+function showPreview() {
+
+    if (!selectedFile) {
+        return;
+    }
+
+    const reader =
+        new FileReader();
+
+    reader.onload = function (event) {
+
+        preview.src =
+            event.target.result;
+
+        previewContainer.classList.remove(
+            "hidden"
+        );
+    };
+
+    reader.readAsDataURL(
+        selectedFile
+    );
+}
+
+
+/* Get selected allergens */
+
+function getAllergens() {
+
+    const selected =
+        document.querySelectorAll(
+            ".allergens input:checked"
+        );
+
+    return Array.from(selected)
+        .map(
+            checkbox => checkbox.value
+        );
+}
+
+
+/* Analyze */
+
+analyzeButton.addEventListener(
+    "click",
+    async function () {
+
+        if (!selectedFile) {
+
+            alert(
+                "Please select a menu image first."
+            );
+
+            return;
+        }
+
+
+        const allergens =
+            getAllergens();
+
+
+        if (allergens.length === 0) {
+
+            alert(
+                "Please select at least one allergen."
+            );
+
+            return;
+        }
+
+
+        const formData =
+            new FormData();
+
+        formData.append(
+            "image",
+            selectedFile
+        );
+
+        formData.append(
+            "allergens",
+            JSON.stringify(allergens)
+        );
+
+
+        loading.classList.remove(
+            "hidden"
+        );
+
+        analyzeButton.disabled = true;
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/analyze",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.error ||
+                    "Analysis failed."
+                );
+            }
+
+
+            displayResults(data);
+
+        }
+
+        catch (error) {
+
+            alert(
+                "❌ " +
+                error.message
+            );
+
+        }
+
+        finally {
+
+            loading.classList.add(
+                "hidden"
+            );
+
+            analyzeButton.disabled = false;
+
+        }
+
+    }
+);
+
+
+/* Display results */
+
+function displayResults(data) {
+
+    results.classList.remove(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "summary"
+    ).textContent =
+        data.summary;
+
+
+    document.getElementById(
+        "ocrText"
+    ).textContent =
+        data.ocr_text;
+
+
+    const container =
+        document.getElementById(
+            "dishResults"
+        );
+
+
+    container.innerHTML = "";
+
+
+    data.dishes.forEach(
+        dish => {
+
+            const risk =
+                dish.risk;
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "dish-card";
+
+
+            card.innerHTML = `
+
+                <div class="dish-header">
+
+                    <div class="dish-name">
+                        ${escapeHtml(
+                            dish.dish
+                        )}
+                    </div>
+
+                    <div class="risk ${risk.level}">
+                        ${risk.level}
+                        ·
+                        ${risk.score}/100
+                    </div>
+
+                </div>
+
+
+                <p>
+                    <strong>
+                        Detected allergens:
+                    </strong>
+
+                    ${
+                        dish.detected_allergens
+                            .map(escapeHtml)
+                            .join(", ")
+                            ||
+                        "None detected"
+                    }
+                </p>
+
+
+                <p>
+                    <strong>
+                        Your profile match:
+                    </strong>
+
+                    ${
+                        risk.matches
+                            .map(escapeHtml)
+                            .join(", ")
+                            ||
+                        "None"
+                    }
+                </p>
+
+
+                <p>
+                    ${escapeHtml(
+                        dish.explanation
+                    )}
+                </p>
+
+
+                <p>
+                    <strong>
+                        AI confidence:
+                    </strong>
+
+                    ${escapeHtml(
+                        dish.confidence
+                    )}
+                </p>
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    results.scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+
+/* Security helper */
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}

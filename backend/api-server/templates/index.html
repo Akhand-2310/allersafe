@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AllerSafe | Menu scanner</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="scanner-page">
+    <header class="scanner-nav">
+        <a class="scanner-brand" href="/dashboard" aria-label="Back to AllerSafe dashboard">
+            <span class="scanner-brand-mark" aria-hidden="true">✦</span>
+            <span><strong>AllerSafe</strong><small>Food confidence, made simple</small></span>
+        </a>
+        <nav class="scanner-links" aria-label="Main navigation">
+            <a href="/dashboard">Dashboard</a>
+            <a class="active" href="/scanner">Menu scanner</a>
+            <form action="/logout" method="post">
+                <button type="submit">Log out</button>
+            </form>
+        </nav>
+    </header>
+
+    <main class="scanner-shell">
+        <section class="scanner-intro">
+            <div>
+                <p class="scanner-eyebrow">Personal safety check</p>
+                <h1>Know what’s on your plate.</h1>
+                <p class="scanner-lede">Upload a clear photo of a restaurant menu and we’ll highlight dishes that may conflict with your allergen profile.</p>
+            </div>
+            <div class="scanner-trust">
+                <span class="trust-icon" aria-hidden="true">✓</span>
+                <span><strong>Private by design</strong><small>Your menu is analyzed for this session only.</small></span>
+            </div>
+        </section>
+
+        <div class="scanner-layout">
+            <section class="scanner-card profile-card">
+                <div class="card-heading">
+                    <div class="heading-icon green-icon" aria-hidden="true">1</div>
+                    <div><p class="card-kicker">Your profile</p><h2>Select your allergens</h2></div>
+                </div>
+                <p class="card-helper">Choose everything you need to avoid. You can change this for every scan.</p>
+                <div class="allergen-grid scanner-allergen-grid">
+                    {% for allergen in ["Peanuts", "Tree nuts", "Dairy", "Gluten", "Eggs", "Soy", "Shellfish", "Fish", "Sesame"] %}
+                    <label class="allergen-chip">
+                        <input type="checkbox" value="{{ allergen }}">
+                        <span class="chip-check" aria-hidden="true">✓</span>
+                        <span>{{ allergen }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+                <p class="selection-count" id="selectionCount">0 allergens selected</p>
+            </section>
+
+            <section class="scanner-card upload-card">
+                <div class="card-heading">
+                    <div class="heading-icon purple-icon" aria-hidden="true">2</div>
+                    <div><p class="card-kicker">Menu photo</p><h2>Upload your menu</h2></div>
+                </div>
+                <div class="drop-zone scanner-drop-zone" id="dropZone" role="button" tabindex="0" aria-label="Choose a menu image">
+                    <input type="file" id="menuImage" accept="image/jpeg,image/png,image/webp" hidden>
+                    <div id="uploadPrompt">
+                        <div class="upload-orb" aria-hidden="true">↑</div>
+                        <h3>Drop your menu here</h3>
+                        <p>or choose a photo from your device</p>
+                        <span class="choose-btn">Choose image</span>
+                        <small>JPG, PNG or WEBP · Max 10 MB</small>
+                    </div>
+                    <div class="preview-container is-hidden" id="previewContainer">
+                        <img id="menuPreview" alt="Selected menu preview">
+                        <div class="preview-info">
+                            <span class="preview-badge">Ready to scan</span>
+                            <h3 id="fileName">Menu image</h3>
+                            <p id="fileSize"></p>
+                            <button class="remove-btn" type="button" id="removeImage">Remove image</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="scan-submit" type="button" id="analyzeButton"><span aria-hidden="true">✦</span> Analyze menu</button>
+                <p class="scan-status" id="loading" role="status" aria-live="polite"></p>
+            </section>
+        </div>
+
+        <section class="results-panel is-hidden" id="results" aria-live="polite"></section>
+        <p class="safety-note"><span aria-hidden="true">!</span> AllerSafe is an AI assistant, not a medical device. Always confirm ingredients and cross-contact procedures with restaurant staff.</p>
+    </main>
+    <script src="/static/app.js"></script>
+</body>
+</html>
